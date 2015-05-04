@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>webcam+</title>
+  <!-- CSS -->
+  
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/components/icon.min.css">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/components/button.min.css">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/components/reset.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <!-- jQuery UI CSS -->
+  <link rel="stylesheet" href="jquery-ui.min.css">
+  
+  <!-- FAVICON -->
+  <link rel="icon" href="http://zaxad23.github.io/img/logo_16x16.png">
+  <link rel="icon" href="http://zaxad23.github.io/img/logo_32x32.png">
+  
+  <!-- META -->
+  <meta charset="utf-8">
+  <meta name="Keywords" content="kamerka,internetowa,kamerka internetowa,zdjęcia,fotki,zdjęcia z kamerki,skorupa">
+  <meta name="Description" content="Fotki to bezpłatne narzędzie do robienia zdjęć z kamerki internetowej bez użycia technologii Adobe Flash! Zrób zdjęcię, edytuj je i pobierz!">
+  
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript"></script>
+  <script src="jquery-ui.min.js" type="text/javascript"></script>
+  
+  <!-- JS -->
+  <script src="engine.js"></script>
+  <script src="setup.js"></script>
+</head>
+<body>
+  <!-- ============ MENU ============= -->
+  <div id="superbar">
+    <i id="menuclick" class="icon justify align huge white clickable"></i>
+    <div id="title" style="font-size:20px;">
+      webcam+
+    </div>
+  </div>
+  <!-- ============ USTAWIENIA ============= -->
+  <div id="settings">
+    <div class="navbar ElemSett">
+      <p style="display:inline-block;">webcam+</p>
+      <i class="icon justify align large clickable" style="float:right;margin-top:14px;"></i>
+    </div>
+    <div id="now">
+      <div id="scr0">
+        Ten etap nie posiada ustawień.
+      </div>
+      <!-- ========= DLA APARATU ========= -->
+      <div id="scr4" style="display:none;">
+        Samowyzwalacz: 
+        <select id="samowyzwalacz" onchange="if(!counting) count=this.value;">
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+        </select>
+      </div>
+      <!-- =========== DLA EDYCJI =========== -->
+      <div id="scr5" style="display:none;">
+        Kolor do rysowania: 
+        <select id="kolor" onchange="color=this.value;">
+          <option value="black">Czarny</option>
+          <option value="white">Biały</option>
+          <option value="green">Zielony</option>
+          <option value="yellow">Żółty</option>
+          <option value="blue">Niebieski</option>
+          <option value="red">Czerwony</option>
+          <option value="pink">Różowy</option>
+        </select>
+        <br>
+        <br>
+        <br>
+        
+       <div class="center" style="margin-left: auto; margin-right: auto; width: 250px;">
+          <div class="ui button positive icon circular" style="display:inline-block;" onclick="convert()">
+            <i class="icon checkmark"></i>
+          </div>
+          <div class="center" style="display: inline-block;margin:0px 10px;">Podoba ci się?</div>
+          <div class="ui button negative icon circular" style="display:inline-block;" onclick="wroc()">
+            <i class="icon remove"></i>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  
+  
+  <!-- ========= ETAPY ======== -->
+  
+  
+  
+  <div id="screen">
+    <!-- EKRAN PRZYWITANIA -->
+    <div id="screen1" class="screen message">
+      <div>
+        <h1>webcam+ - nowoczesny sposób na zdjęcie</h1>
+        <div class="ui animated button positive huge" id="zacznij-button">
+          <div class="visible content">Zacznij</div>
+          <div class="hidden content">
+            <i class="right arrow icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PROŚBA O VIDEO -->
+    <div id="screen2" class="screen message" style="display:none;">
+      <div>
+        <h1>&lt; najpierw udostępnij swoją kamerkę &gt;</h1>
+        <h6>Webcam+ nigdy nie wyśle Twoich zdjęć do internetu bez Twojej zgody.</h6>
+      </div>
+    </div>
+    <!-- PROBLEM -->
+    <div id="screen3" class="screen message" style="display:none;">
+      <div>
+        <h1>Problem! :(</h1>
+        <p>Aplikacja Webcam+ nie dostała się do Twojej kamerki!</p>
+        <p>Upewnij się, że żaden inny program nie korzysta z Twojej kamerki i spróbuj ponownie.</p>
+      </div>
+    </div>
+    <!-- APLIKACJA APARATU -->
+    <div id="screen4" class="screen" style="display:none;">
+      <div>
+        <h1>Najpierw zrób zdjęcie.</h1>
+        <video id="video" width="auto" height="auto" style="border: 2px solid black" title="Kliknij, aby zrobić natychmiast zdjęcie."></video>
+        <br><br>
+        <div class="ui icon button positive circular" id="camera-button">
+          <i class="camera icon" id="przyciskAparat"></i>
+          <div id="numerOdliczania">3</div>
+        </div>
+      </div>
+    </div>
+    <!-- EDYCJA ZDJĘCIA -->
+    <div id="screen5" class="screen" style="display:none;">
+      <div>
+        <h1>Teraz je edytuj.</h1>
+        <canvas id="canvas"></canvas>
+      </div>
+    </div>
+    <!-- KONIEC -->
+    <div id="screen6" class="screen" style="display:none;">
+      <div>
+        <h1>Gotowe!</h1>
+        <img id="preview" src="#" alt="Twoje zdjęcie.">
+        <br>
+        <a href="#" id="pobierz" download="zdjecie">
+          <div class="ui animated button positive">
+            <div class="visible content">Pobierz</div>
+            <div class="hidden content">
+              <i class="download icon"></i>
+            </div>
+          </div>
+        </a>
+        <div class="ui button primary circular icon" id="odswiez" onclick="znowu()">
+          <i class="icon refresh"></i>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+  </div>
+</body>
+</html>
