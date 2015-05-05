@@ -1,5 +1,5 @@
 // setup.js
-// webcam+ by skorupa (c)
+// webcam+ by Adam Skorupski
 
 $(document).ready(function(){
    // variables setup

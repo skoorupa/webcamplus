@@ -6,10 +6,10 @@
 // <3
 
 $(document).ready(function(){
-   // dla każdego getUserMedia
+   // cross-browser getUserMedia
    navigator.UserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
    
-   $("#zacznij-button").click(function(){
+   $("#zacznij-button").click(function(){ // start and run getUserMedia
       function complete(){
          $("#screen2").fadeIn(1000);
          waitingForStream=true;
@@ -26,19 +26,20 @@ $(document).ready(function(){
    cameraIcon   = $("#przyciskAparat");
    cameraCount  = $("#numerOdliczania");
    
-   cameraButton.click(odliczanie);
+   cameraButton.click(odliczanie); // on click it's counting
    
-   $("#menuclick").click(function(){
+   $("#menuclick").click(function(){ // show settings
       $("#superbar").hide("drop",function(){
          $("#settings").show("drop");
       });
    });
    
-   $(".navbar > i").click(function(){
+   $(".navbar > i").click(function(){ // hide settings
       $("#settings").hide("drop",function(){
          $("#superbar").show("drop");
       });
    });
+   
    c = $("#canvas");
    ctx = c[0].getContext('2d');
    
