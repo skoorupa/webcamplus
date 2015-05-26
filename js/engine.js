@@ -47,14 +47,17 @@ $(document).ready(function(){
    c.mousedown(mousedown);
    c.click(function(){isclick(this);});
    
-   var previewIMG = $("#preview");
+   previewIMG = $("#preview");
    $("#kolor").val("black");
    
    img = $("#preview")[0]; 
+   $("input[type=checkbox]")[0].checked = true
+   
+   watC = $("#watermarkCount")
 });
 
 function getStream(){
-   if(!!navigator.UserMedia){
+   if(navigator.UserMedia){
      navigator.UserMedia({video:true},function(stream){ // chcemy video w postaci stream
         waitingForStream=false;
         
@@ -88,7 +91,10 @@ var color;
 
 var url,link,t,
     count = 3;// globalne zmienne, DO BOJU   
-counting=false;
+    
+var counting=false;
+
+var znakwodny = true;
   
 function odliczanie(){
   counting=true;
@@ -161,33 +167,67 @@ function isclick(e){
   ctx.lineCap = 'round';
 }
 
+var waiting = false;
+
 function convert(){
-  $("#kolor").val("black");   
-  napiszrodlo = new Image();
-  napiszrodlo.src = "zrodlo.png";
-  napiszrodlo.onload = function () {
-      ctx.drawImage(napiszrodlo,hzdj-100,wzdj-190);
-  
-      url = c[0].toDataURL('image/png');
+   if(!waiting){
+      $("#kolor").val("black");   
+      napiszrodlo = new Image();
+      napiszrodlo.src = "zrodlo.png";
+      napiszrodlo.onload = function() {
+         if(znakwodny)
+            ctx.drawImage(napiszrodlo,hzdj-100,wzdj-190);
       
-      img.setAttribute("src",url);
-    
-      link = document.querySelector("#pobierz"); 
-      link.setAttribute('href',url); 
+         url = c[0].toDataURL('image/png');
+         
+         img.setAttribute("src",url);
       
-      $("#scr5").hide();
-      $("#scr0").show();
-      $("#settings").hide("drop",function(){
-         $("#superbar").show("drop");
-      });
-      $("#screen5").fadeOut(1000, function(){
-         $("#screen6").fadeIn(1000);
-      });
-  };
+         link = document.querySelector("#pobierz"); 
+         link.setAttribute('href',url); 
+         
+         if(znakwodny){
+            $("#scr5").hide();
+            $("#scr0").show();
+            $("#settings").hide("drop",function(){
+               $("#superbar").show("drop");
+            });
+            $("#screen5").fadeOut(1000, function(){
+               $("#screen6").fadeIn(1000);
+            });
+         } else {
+            countW = 15;
+            waiting = true;
+            koniec();
+         }
+      };
+   }
+}
+
+function koniec(){
+   if(countW>0&&waiting){
+      watC.text(countW);
+      countW--;
+      setTimeout(koniec,1000);
+   } else {
+      countW = 0;
+      watC.text("");
+      
+      if(waiting){
+         $("#scr5").hide();
+         $("#scr0").show();
+         $("#settings").hide("drop",function(){
+            $("#superbar").show("drop");
+         });
+         $("#screen5").fadeOut(1000, function(){
+            $("#screen6").fadeIn(1000);
+         });
+      }
+      waiting=false;
+   }
 }
 
 function znowu(){
-   $("#scr6").hide();
+   $("#scr0").hide();
    $("#scr4").show();
    $("#settings").hide("drop",function(){
      $("#superbar").show("drop");
@@ -198,6 +238,7 @@ function znowu(){
 }
 
 function wroc(){
+   waiting = false;
    $("#scr5").hide();
    $("#scr4").show();
    $("#settings").hide("drop",function(){
@@ -206,4 +247,13 @@ function wroc(){
    $("#screen5").fadeOut(1000, function(){
      $("#screen4").fadeIn(1000);
    });
+}
+
+function zmienznak(checkbox){
+   if(!checkbox.checked){
+      alert("Bardzo mi przykro, że nie chcesz wspierać Webcam+ :(\nJednak rozumiem ciebie, więc jedynie będziesz miał mały, 15 sekundowy odstęp czasu.");
+      znakwodny=false;
+   } else {
+      znakwodny=true;
+   }
 }
