@@ -121,3 +121,7 @@ hr {
   font-size: xx-large;
   /* display:none; */
 }
+
+#canvas {
+  cursor: crosshair;
+}
