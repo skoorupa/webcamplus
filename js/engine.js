@@ -87,7 +87,7 @@ function getStream(){
   }
 }
 
-var color;
+var color="black";
 
 var url,link,t,
     count = 3;// globalne zmienne, DO BOJU   
