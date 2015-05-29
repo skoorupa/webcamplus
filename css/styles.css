@@ -37,6 +37,7 @@ body {
 #screen {
   position:relative;
   top:0;
+  margin-left:80px;
 }
 
 .screen.message > div:nth-child(1) {
