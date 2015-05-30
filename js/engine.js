@@ -142,7 +142,7 @@ console.log("A kto ci tu pozwolił wchodzić? :D"); // fun
 // rysowanie
 
 function write(e){
-  ctx.lineTo(e.pageX - c[0].offsetLeft,e.pageY - $("#screen")[0].offsetTop-c[0].offsetTop);
+  ctx.lineTo(e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft,e.pageY - $("#screen")[0].offsetTop-c[0].offsetTop);
   ctx.stroke();
   ctx.lineWidth = 5;
   ctx.strokeStyle = color;
@@ -160,7 +160,7 @@ function mouseup(){
 
 function isclick(e){
   ctx.beginPath();
-  ctx.lineTo(e.pageX - c[0].offsetLeft,e.pageY - $("#screen")[0].offsetTop)-c[0].offsetTop;
+  ctx.lineTo(e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft,e.pageY - $("#screen")[0].offsetTop-c[0].offsetTop);
   ctx.stroke();
   ctx.lineWidth = 5;
   ctx.strokeStyle = color;
