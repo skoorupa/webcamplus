@@ -43,10 +43,6 @@ $(document).ready(function(){
    c = $("#canvas");
    ctx = c[0].getContext('2d');
    
-   c.mouseup(mouseup);
-   c.mousedown(mousedown);
-   c.click(function(){isclick(this);});
-   
    previewIMG = $("#preview");
    $("#kolor").val("black");
    
@@ -141,30 +137,62 @@ console.log("A kto ci tu pozwolił wchodzić? :D"); // fun
 
 // rysowanie
 
-function write(e){
-  ctx.lineTo(e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft,e.pageY - $("#screen")[0].offsetTop-c[0].offsetTop);
-  ctx.stroke();
+var clickX = [];
+var clickY = [];
+var clickDrag = [];
+var paint;
+var clickColor = [];
+
+function addClick(x, y, dragging)
+{
+  clickX.push(x);
+  clickY.push(y);
+  clickDrag.push(dragging);
+  clickColor.push(color);
+}
+
+$(document).ready(function(){
+   $('#canvas').mousedown(function(e){
+      var mouseX = e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft;
+      var mouseY = e.pageY - c[0].offsetTop - $("#screen")[0].offsetTop;
+            
+      paint = true;
+      addClick(e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft, e.pageY - c[0].offsetTop - $("#screen")[0].offsetTop);
+      redraw();
+   });
+   
+   $('#canvas').mousemove(function(e){
+      if(paint){
+         addClick(e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft, e.pageY - c[0].offsetTop - $("#screen")[0].offsetTop, true);
+         redraw();
+      }
+   });
+   
+   $('#canvas').mouseup(function(e){
+      paint = false;
+   });
+   
+   $('#canvas').mouseleave(function(e){
+      paint = false;
+   });
+});
+
+function redraw(){ 
+  ctx.lineJoin = "round";
   ctx.lineWidth = 5;
-  ctx.strokeStyle = color;
-  ctx.lineCap = 'round';
-}
-
-function mousedown(){
-  c.mousemove(function(e){write(e);});
-  ctx.beginPath();
-}
-
-function mouseup(){
-  c.unbind('mousemove');
-}
-
-function isclick(e){
-  ctx.beginPath();
-  ctx.lineTo(e.pageX - c[0].offsetLeft - $("#screen")[0].offsetLeft,e.pageY - $("#screen")[0].offsetTop-c[0].offsetTop);
-  ctx.stroke();
-  ctx.lineWidth = 5;
-  ctx.strokeStyle = color;
-  ctx.lineCap = 'round';
+			
+  for(var i=0; i < clickX.length; i++) {		
+    ctx.beginPath();
+    if(clickDrag[i] && i){
+      ctx.moveTo(clickX[i-1], clickY[i-1]);
+     }else{
+       ctx.moveTo(clickX[i]-1, clickY[i]);
+     }
+     ctx.lineTo(clickX[i], clickY[i]);
+     ctx.closePath();
+     ctx.strokeStyle = clickColor[i];
+     ctx.stroke();
+  }
 }
 
 var waiting = false;
@@ -257,3 +285,5 @@ function zmienznak(checkbox){
       znakwodny=true;
    }
 }
+
+// w webcam+ jest użyty kod z poradnika: http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-simple
