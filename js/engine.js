@@ -84,6 +84,7 @@ function getStream(){
 }
 
 var color="black";
+var penSize=5;
 
 var url,link,t,
     count = 3;// globalne zmienne, DO BOJU   
@@ -115,6 +116,11 @@ function odliczanie(){
 }
 
 function poo(){
+  clickX = [];
+  clickY = [];
+  clickDrag = [];
+  clickColor = [];
+  clickSize = [];
   $("#screen4").fadeOut(1000, function(){
      $("#screen5").fadeIn(1000);
   });
@@ -140,8 +146,9 @@ console.log("A kto ci tu pozwolił wchodzić? :D"); // fun
 var clickX = [];
 var clickY = [];
 var clickDrag = [];
-var paint;
 var clickColor = [];
+var clickSize = [];
+var paint;
 
 function addClick(x, y, dragging)
 {
@@ -149,6 +156,7 @@ function addClick(x, y, dragging)
   clickY.push(y);
   clickDrag.push(dragging);
   clickColor.push(color);
+  clickSize.push(penSize);
 }
 
 $(document).ready(function(){
@@ -179,7 +187,6 @@ $(document).ready(function(){
 
 function redraw(){ 
   ctx.lineJoin = "round";
-  ctx.lineWidth = 5;
 			
   for(var i=0; i < clickX.length; i++) {		
     ctx.beginPath();
@@ -191,6 +198,7 @@ function redraw(){
      ctx.lineTo(clickX[i], clickY[i]);
      ctx.closePath();
      ctx.strokeStyle = clickColor[i];
+     ctx.lineWidth = clickSize[i];
      ctx.stroke();
   }
 }
@@ -222,10 +230,6 @@ function convert(){
             $("#screen5").fadeOut(1000, function(){
                $("#screen6").fadeIn(1000);
             });
-            clickX = [];
-            clickY = [];
-            clickDrag = [];
-            clickColor = [];
          } else {
             countW = 15;
             waiting = true;
@@ -253,10 +257,6 @@ function koniec(){
          $("#screen5").fadeOut(1000, function(){
             $("#screen6").fadeIn(1000);
          });
-         clickX = [];
-         clickY = [];
-         clickDrag = [];
-         clickColor = [];
       }
       waiting=false;
    }
@@ -283,10 +283,6 @@ function wroc(){
    $("#screen5").fadeOut(1000, function(){
      $("#screen4").fadeIn(1000);
    });
-   clickX = [];
-   clickY = [];
-   clickDrag = [];
-   clickColor = [];
 }
 
 function zmienznak(checkbox){
