@@ -122,8 +122,8 @@ function poo(){
   clickColor = [];
   clickSize = [];
   
-  $("#size").val(5);
-  $("#kolor").val("black");
+  $("#size").val(5); penSize = 5;
+  $("#kolor").val("black"); color = "black";
   
   $("#screen4").fadeOut(1000, function(){
      $("#screen5").fadeIn(1000);
