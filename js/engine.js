@@ -222,6 +222,10 @@ function convert(){
             $("#screen5").fadeOut(1000, function(){
                $("#screen6").fadeIn(1000);
             });
+            clickX = [];
+            clickY = [];
+            clickDrag = [];
+            clickColor = [];
          } else {
             countW = 15;
             waiting = true;
@@ -249,6 +253,10 @@ function koniec(){
          $("#screen5").fadeOut(1000, function(){
             $("#screen6").fadeIn(1000);
          });
+         clickX = [];
+         clickY = [];
+         clickDrag = [];
+         clickColor = [];
       }
       waiting=false;
    }
@@ -275,6 +283,10 @@ function wroc(){
    $("#screen5").fadeOut(1000, function(){
      $("#screen4").fadeIn(1000);
    });
+   clickX = [];
+   clickY = [];
+   clickDrag = [];
+   clickColor = [];
 }
 
 function zmienznak(checkbox){
