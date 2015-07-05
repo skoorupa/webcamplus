@@ -121,6 +121,10 @@ function poo(){
   clickDrag = [];
   clickColor = [];
   clickSize = [];
+  
+  $("#size").val(5);
+  $("#kolor").val("black");
+  
   $("#screen4").fadeOut(1000, function(){
      $("#screen5").fadeIn(1000);
   });
