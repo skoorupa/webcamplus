@@ -47,29 +47,28 @@ $(document).ready(function(){
    $("#kolor").val("black");
    
    img = $("#preview")[0]; 
-   $("input[type=checkbox]")[0].checked = true
+   $("input[type=checkbox]")[0].checked = true;
    
-   watC = $("#watermarkCount")
+   watC = $("#watermarkCount");
 });
 
 function getStream(){
    if(navigator.UserMedia){
      navigator.UserMedia({video:true},function(stream){ // chcemy video w postaci stream
         waitingForStream=false;
-        
+        $("#screen3").hide();
+
         $("#screen2").fadeOut(1000, function(){
            $("#screen4").fadeIn(1000);
         });
         $("#video").attr("height","auto");
         $("#video").attr("width","auto");
         
-        $("#video").attr("src",window.URL.createObjectURL(stream)); // wirtualny atrybut src dla video
+        if(location.search!="?testmode") $("#video").attr("src",window.URL.createObjectURL(stream)); // wirtualny atrybut src dla video
         $("#video")[0].play(); // włączamy
         $("#video").attr("onclick","poo()");
         $("#scr0").hide();
         $("#scr4").show();
-     
-     
      },function(){
         // error
         waitingForStream=false;
@@ -80,6 +79,22 @@ function getStream(){
   } else {
      alert("Niestety, twoja przeglądarka nie obsługuje navigator.getUserMedia");
      waitingForStream=false;
+  }
+  if(location.search=="?testmode"){
+    waitingForStream=false;
+    $("#screen3").hide();
+
+    $("#screen2").fadeOut(1000, function(){
+       $("#screen4").fadeIn(1000);
+    });
+    $("#video").attr("height","auto");
+    $("#video").attr("width","auto");
+    
+    if(location.search!="?testmode") $("#video").attr("src",window.URL.createObjectURL(stream)); // wirtualny atrybut src dla video
+    $("#video")[0].play(); // włączamy
+    $("#video").attr("onclick","poo()");
+    $("#scr0").hide();
+    $("#scr4").show();
   }
 }
 
@@ -121,6 +136,9 @@ function poo(){
   clickDrag = [];
   clickColor = [];
   clickSize = [];
+
+  historia = new Array();
+  historiaNumber = 0;
   
   $("#size").val(5); penSize = 5;
   $("#kolor").val("black"); color = "black";
@@ -137,13 +155,42 @@ function poo(){
   c[0].width = document.querySelector("#video").videoWidth;
   c[0].height = document.querySelector("#video").videoHeight; // szerokosc i wysokosc canvasu = video
   
+  if(location.search=="?testmode"){
+    c[0].width = "640";
+    c[0].height = "400";
+  }
+
   wzdj = c[0].width; 
   hzdj = c[0].height; 
   
   ctx.drawImage(document.querySelector("#video"),0,0); // malujemy obraz
+  if(location.search=="?testmode"){
+    ctx.fillStyle="black";
+    ctx.fillRect(0,0,640,100);
+    ctx.fillStyle="gray";
+    ctx.fillRect(0,100,640,200);
+    ctx.fillStyle="white";
+    ctx.fillRect(0,200,640,300);
+    ctx.fillStyle="red";
+    ctx.fillRect(0,300,640,400);
+  } 
   
+  historia[historiaNumber] = c[0].toDataURL('image/png');
 }
 console.log("A kto ci tu pozwolił wchodzić? :D"); // fun
+
+function menuedycja(v){
+  switch(v){
+    case "cofnij":
+      back();
+      break;
+    case "ponow":
+      prev();
+      break;
+  }
+
+  $("#menuedycja").val("blank");
+}
 
 // rysowanie
 
@@ -153,6 +200,9 @@ var clickDrag = [];
 var clickColor = [];
 var clickSize = [];
 var paint;
+
+var historia = new Array();
+var historiaNumber = 0;
 
 function addClick(x, y, dragging)
 {
@@ -182,12 +232,47 @@ $(document).ready(function(){
    
    $('#canvas').mouseup(function(e){
       paint = false;
+
+      historiaNumber++;
+      historia[historiaNumber] = c[0].toDataURL('image/png');
+
+      if(historiaNumber<historia.length) historia.splice(historiaNumber+1,historia.length);
+
+      clickX = [];
+      clickY = [];
+      clickDrag = [];
+      clickColor = [];
+      clickSize = [];
+
+      console.log(historia.length + "<- l, up, hN ->" + historiaNumber);
    });
    
    $('#canvas').mouseleave(function(e){
       paint = false;
    });
 });
+
+function back(){
+  if(historiaNumber>0){
+    historiaNumber--;
+  
+    var historiaimg = new Image();
+    historiaimg.setAttribute("src",historia[historiaNumber]);
+    ctx.drawImage(historiaimg,0,0);
+    console.log(historia.length + "<- l, back, hN ->" + historiaNumber);
+  }
+}
+
+function prev(){
+  if(historiaNumber!=historia.length-1){
+    historiaNumber++;
+  
+    var historiaimg = new Image();
+    historiaimg.setAttribute("src",historia[historiaNumber]);
+    ctx.drawImage(historiaimg,0,0);
+    console.log(historia.length + "<- l, prev, hN ->" + historiaNumber);
+  }
+}
 
 function redraw(){ 
   ctx.lineJoin = "round";
@@ -196,7 +281,7 @@ function redraw(){
     ctx.beginPath();
     if(clickDrag[i] && i){
       ctx.moveTo(clickX[i-1], clickY[i-1]);
-     }else{
+     } else {
        ctx.moveTo(clickX[i]-1, clickY[i]);
      }
      ctx.lineTo(clickX[i], clickY[i]);

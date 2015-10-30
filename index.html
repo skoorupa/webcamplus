@@ -66,6 +66,15 @@
       </div>
       <!--  =========== DLA EDYCJI ===========  -->
       <div id="scr5" style="display:none;">
+        Menu: 
+        <select id="menuedycja" onchange="menuedycja(this.value)">
+          <option value="blank">---------</option>
+          <optgroup label="Edycja">
+            <option value="cofnij">Cofnij</option>
+            <option value="ponow">Ponów</option>
+          </optgroup>
+        </select>
+        <hr>
         Kolor do rysowania: 
         <select id="kolor" onchange="color=this.value;">
           <option value="black">Czarny</option>
@@ -76,7 +85,7 @@
           <option value="red">Czerwony</option>
           <option value="pink">Różowy</option>
         </select>
-        <hr>
+        <br>
         Wielkość pisaka: <input type="range" id="size" min="1" max="75" value="5" onchange="penSize=+this.value;">
         <hr>
         Znak wodny: <input type="checkbox" checked="checked" onclick="zmienznak(this)">
