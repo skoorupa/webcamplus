@@ -15,4 +15,7 @@ $(document).ready(function(){
    $("#title").css("marginTop",titleMargin);
    
    $("#update").html(document.lastModified);
+
+   if(location.protocol == "http:")
+      location.protocol = "https:"; 
 });
