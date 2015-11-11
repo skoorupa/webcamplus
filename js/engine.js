@@ -374,6 +374,17 @@ function wroc(){
    });
 }
 
+function edit(){
+  $("#scr0").hide();
+  $("#scr5").show();
+  $("#superbar").hide("drop",function(){
+     $("#settings").show("drop");
+  });
+  $("#screen6").fadeOut(1000, function(){
+    $("#screen5").fadeIn(1000);
+  });
+}
+
 function zmienznak(checkbox){
    if(!checkbox.checked){
       alert("Bardzo mi przykro, że nie chcesz wspierać Webcam+ :(\nJednak rozumiem ciebie, więc jedynie będziesz miał mały, 15 sekundowy odstęp czasu.");

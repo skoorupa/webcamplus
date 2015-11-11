@@ -94,9 +94,10 @@ select {
   cursor:pointer;
 }
 
-#pobierz, #odswiez {
+#pobierz, #odswiez, #edytuj {
   position:relative;
   bottom: 60px;
+  display:inline-block;
 }
 
 #info {
